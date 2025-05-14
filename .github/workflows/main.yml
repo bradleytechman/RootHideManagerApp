@@ -1,10 +1,10 @@
-name: Build and Package Rootless
+name: Build and Package rootful
 
 on:
   push:
-    branches: [ rootless ]
+    branches: [ rootful ]
   pull_request:
-    branches: [ rootless ]
+    branches: [ rootful ]
   workflow_dispatch:
 
 jobs:
@@ -55,13 +55,13 @@ jobs:
         with:
           name: varClean15
           path: varClean15.tipa
-      - name: Create Release and Upload IPA (Rootless)
+      - name: Create Release and Upload IPA (rootful)
         uses: softprops/action-gh-release@v1
         if: success()
         with:
           files: varClean15.tipa
-          tag_name: rootless-v${{ github.run_number }}  # Avoid tag conflicts
-          name: Rootless
+          tag_name: rootful-v${{ github.run_number }}  # Avoid tag conflicts
+          name: rootful
           draft: false
           prerelease: true
         env:
