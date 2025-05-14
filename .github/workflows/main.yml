@@ -1,10 +1,10 @@
-name: Build and Package Rootful
+name: Build and Package Rootless
 
 on:
   push:
-    branches: [ rootful ]
+    branches: [ rootless ]
   pull_request:
-    branches: [ rootful ]
+    branches: [ rootless ]
   workflow_dispatch:
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
                      -sdk iphoneos \
                      -destination 'generic/platform=iOS' \
                      MARKETING_VERSION=$THEOS_PACKAGE_BASE_VERSION \
-                     IPHONEOS_DEPLOYMENT_TARGET=14.0 \
+                     IPHONEOS_DEPLOYMENT_TARGET=15.0 \
                      CODE_SIGN_IDENTITY="" \
                      AD_HOC_CODE_SIGNING_ALLOWED=YES \
                      build
@@ -48,21 +48,20 @@ jobs:
 
       - name: Re-package IPA after signing
         run: |
-          zip -r9 varClean14.tipa Payload
+          zip -r9 varClean15.tipa Payload
 
       - name: Upload IPA
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: varClean14
-          path: varClean14.tipa
-
-      - name: Create Release and Upload IPA (Rootful)
+          name: varClean15
+          path: varClean15.tipa
+      - name: Create Release and Upload IPA (Rootless)
         uses: softprops/action-gh-release@v1
         if: success()
         with:
-          files: varClean14.tipa
-          tag_name: rootful
-          name: Rootful
+          files: varClean15.tipa
+          tag_name: rootless-v${{ github.run_number }}  # Avoid tag conflicts
+          name: Rootless
           draft: false
           prerelease: true
         env:
